@@ -1,2 +1,2 @@
-# ibe-test-page
-Test webpage for our IBE component
+# Booking Widget
+Demo webpage for our booking widget
