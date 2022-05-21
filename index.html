@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking WebComponent Demo</title>
 
-    <!-- <script src="/js/runtime-main.e28df5d6.js"></script>  -->
-    <link href="styles.css" rel="stylesheet"/>
-	<style>
-		body {
-			min-height: 100vh;
-			display: flex;
-			flex-direction: column;
-            margin:0; 
+    <link href="booking-likemagic.min.css" rel="stylesheet" />
+    <script src="booking-likemagic.min.js"></script>
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
             font-family: sans-serif;
-		}
-		footer {
-			margin-top: auto;
-		}
-	</style>
+        }
+
+        footer {
+            margin-top: auto;
+        }
+    </style>
 </head>
+
 <body>
     <div style="
       background-size: cover; height:280px; padding-top:80px;
@@ -29,14 +32,14 @@
         <p style="font-size:30px; color: #ff6c76;">Booking WebComponent Demo Page</p>
     </div>
     <div style="display: flex; justify-content: center; width: 100%;">
-    <div style="width: 1200px;">
-   	 <booking-likemagic tenant="staykooook-test" language="en"></booking-likemagic>
+        <div style="width: 1200px;">
+            <booking-likemagic tenant="staykooook-test" language="en"></booking-likemagic>
+        </div>
     </div>
-</div>
-<footer style="height:auto; background-color:#70a6fc;">
-	<h1 style="color: #f0f5fe; padding:40px; margin:0; text-align:center;">Made
-		with 🤍 at likeMagic</h1>
-</footer>
-    <script  src="magic.js"></script>
+    <footer style="height:auto; background-color:#70a6fc;">
+        <h1 style="color: #f0f5fe; padding:40px; margin:0; text-align:center;">Made
+            with 🤍 at likeMagic</h1>
+    </footer>
 </body>
+
 </html>
