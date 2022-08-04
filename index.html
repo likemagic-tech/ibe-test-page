@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking WebComponent Demo</title>
-
     <link href="https://my.staykooook-dev.3ap.ch/booking-likemagic.min.css" rel="stylesheet" />
     <script src="https://my.staykooook-dev.3ap.ch/booking-likemagic.min.js"></script>
     <style>
@@ -22,24 +21,114 @@
             margin-top: auto;
         }
     </style>
+
 </head>
 
 <body>
     <div style="
-      background-size: cover; height:280px; padding-top:80px;
-      text-align:center; background-color: #14263d">
+         background-size: cover; height:280px; padding-top:80px;
+         text-align:center; background-color: #14263d;">
         <img src="images/likeMagic_header.png" style="height:150px;" alt="likeMagic Logo">
         <p style="font-size:30px; color: #ff6c76;">Booking WebComponent Demo Page</p>
     </div>
-    <div style="display: flex; justify-content: center; width: 100%;">
-        <div style="width: 1200px;">
-            <booking-likemagic tenant="staykooook-dev" language="en"></booking-likemagic>
+    <div style="padding: 10px;">
+        <h1>How to integrate the booking widget into your website?</h1>
+        <h2>Please provide following info</h2>
+        <ul>
+            <li><label for="website">Your URL:</label>
+                <input type="input" name="website" id="website" placeholder="https://likemagic.tech">
+            </li>
+            <li><label for="lang">Language:</label>
+                <select id="lang">
+                    <option value="de">de</option>
+                    <option value="en">en</option>
+                    <option value="fr">fr</option>
+                    <option value="it">it</option>
+                </select>
+            </li>
+            <li><label for="tenant">Tenant Name given to you by likeMagic:</label>
+                <input type="input" name="tenant" id="tenant" placeholder="likemagic">
+            </li>
+        </ul>
+        <h2>Add the Javascript file in your &lt;head&gt; element</h2>
+        <pre style="background-color: lightgrey;"><code id="js">
+&lt;script src="https://my.likemagic.tech/booking-likemagic.min.js"&gt;&lt;/script&gt;
+        </code></pre>
+        <div style="display: flex; justify-content: center; width: 100%;"></div>
+        <h2>Add the CSS file in your &lt;head&gt; element</h2>
+        <pre style="background-color: lightgrey;"><code id="css">
+&lt;link href="https://my.likemagic.tech/booking-likemagic.min.css" rel="stylesheet" /&gt;
+        </code></pre>
+        <h2>Add the WebComponentin your &lt;body&gt; element</h2>
+        <pre style="background-color: lightgrey;"><code id="component">
+&lt;booking-likemagic tenant="likemagic" language="en"&gt;&lt;/booking-likemagic&gt;
+    </code></pre>
+        <div style="display: flex; justify-content: center; width: 100%;"></div>
+        <h1 style="margin-top: 60px;">Example of StayKooook</h1>
+        <div style="display: flex; justify-content: center; width: 100%; margin-bottom: 100px; margin-top: 50px;">
+            <div style="width: 1200px;">
+                <booking-likemagic tenant="staykooook-dev" language="en"></booking-likemagic>
+            </div>
         </div>
     </div>
     <footer style="height:auto; background-color:#70a6fc;">
         <h1 style="color: #f0f5fe; padding:40px; margin:0; text-align:center;">Made
-            with 🤍 at likeMagic</h1>
+            with 🤍 at likeMagic
+        </h1>
     </footer>
 </body>
+<script>
+    const websiteInput = document.querySelector('#website');
+    const langInput = document.querySelector('#lang');
+    const tenantInput = document.querySelector('#tenant');
+
+    const params = new URLSearchParams(location.search);
+
+    const website = params.get('website');
+    let lang = params.get('lang') || 'en';
+    let tenant = params.get('tenant') || 'likemagic';
+
+    if (website !== null) {
+        websiteInput.value = website;
+
+
+        langInput.value = lang;
+
+        tenantInput.value = tenant;
+
+        const js = document.querySelector('#js');
+        js.textContent = `<script src="${website}/booking-likemagic.min.js"><script>`;
+
+        const css = document.querySelector('#css');
+        css.textContent = `<link href="${website}/booking-likemagic.min.css" rel="stylesheet">`;
+
+        const component = document.querySelector('#component');
+        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"></booking-likemagic>`;
+    }
+
+
+
+    websiteInput.addEventListener('input', (event) => {
+        const js = document.querySelector('#js');
+        js.textContent = `<script src="${event.target.value}/booking-likemagic.min.js"><script>`;
+
+        const css = document.querySelector('#css');
+        css.textContent = `<link href="${event.target.value}/booking-likemagic.min.css" rel="stylesheet">`;
+    });
+
+    langInput.addEventListener('change', (event) => {
+        const component = document.querySelector('#component');
+        lang = event.target.value;
+        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"></booking-likemagic>`;
+    });
+
+    tenantInput.addEventListener('input', (event) => {
+        const component = document.querySelector('#component');
+        tenant = event.target.value;
+        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"></booking-likemagic>`;
+    });
+
+
+</script>
 
 </html>
