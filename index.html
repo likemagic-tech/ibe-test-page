@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking WebComponent Demo</title>
-    <link href="https://my.staykooook-dev.3ap.ch/booking-likemagic.min.css" rel="stylesheet" />
-    <script src="https://my.staykooook-dev.3ap.ch/booking-likemagic.min.js"></script>
+    <link href="https://my.staykooook-dev.likemagic.tech/booking-likemagic.min.css" rel="stylesheet" />
+    <script src="https://my.staykooook-dev.likemagic.tech/booking-likemagic.min.js"></script>
     <style>
         body {
             min-height: 100vh;
@@ -97,7 +97,7 @@
         tenantInput.value = tenant;
 
         const js = document.querySelector('#js');
-        js.textContent = `<script src="${website}/booking-likemagic.min.js"><script>`;
+        js.textContent = `<script src="${website}/booking-likemagic.min.js"></script>`;
 
         const css = document.querySelector('#css');
         css.textContent = `<link href="${website}/booking-likemagic.min.css" rel="stylesheet">`;
@@ -110,7 +110,7 @@
 
     websiteInput.addEventListener('input', (event) => {
         const js = document.querySelector('#js');
-        js.textContent = `<script src="${event.target.value}/booking-likemagic.min.js"><script>`;
+        js.textContent = `<script src="${event.target.value}/booking-likemagic.min.js"></script>`;
 
         const css = document.querySelector('#css');
         css.textContent = `<link href="${event.target.value}/booking-likemagic.min.css" rel="stylesheet">`;
