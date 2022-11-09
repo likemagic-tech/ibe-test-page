@@ -97,7 +97,7 @@
         tenantInput.value = tenant;
 
         const js = document.querySelector('#js');
-        js.textContent = `<script src="${website}/booking-likemagic.min.js"><//script>`;
+        js.textContent = `<script src="${website}/booking-likemagic.min.js"><\/script>`;
 
         const css = document.querySelector('#css');
         css.textContent = `<link href="${website}/booking-likemagic.min.css" rel="stylesheet">`;
@@ -110,7 +110,7 @@
 
     websiteInput.addEventListener('input', (event) => {
         const js = document.querySelector('#js');
-        js.textContent = `<script src="${event.target.value}/booking-likemagic.min.js"><//script>`;
+        js.textContent = `<script src="${event.target.value}/booking-likemagic.min.js"><\/script>`;
 
         const css = document.querySelector('#css');
         css.textContent = `<link href="${event.target.value}/booking-likemagic.min.css" rel="stylesheet">`;
