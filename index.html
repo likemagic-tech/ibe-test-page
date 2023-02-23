@@ -49,6 +49,9 @@
             <li><label for="tenant">Tenant Name given to you by likeMagic:</label>
                 <input type="input" name="tenant" id="tenant" placeholder="likemagic">
             </li>
+            <li><label for="cssurl"><strong>Optional </strong>Custom CSS File(relative path):</label>
+                <input type="input" name="cssurl" id="cssurl" placeholder="/custom-booking-widget.css">
+            </li>
         </ul>
         <h2>Add the Javascript file in your &lt;head&gt; element</h2>
         <pre style="background-color: lightgrey;"><code id="js">
@@ -81,29 +84,37 @@
     const websiteInput = document.querySelector('#website');
     const langInput = document.querySelector('#lang');
     const tenantInput = document.querySelector('#tenant');
+    const cssUrlInput = document.querySelector('#cssurl');
 
     const params = new URLSearchParams(location.search);
 
     const website = params.get('website');
     let lang = params.get('lang') || 'en';
     let tenant = params.get('tenant') || 'likemagic';
+    let cssurl = params.get('cssurl');
+
 
     if (website !== null) {
         websiteInput.value = website;
-
-
         langInput.value = lang;
-
         tenantInput.value = tenant;
+        cssUrlInput.value = cssurl;
+
 
         const js = document.querySelector('#js');
         js.textContent = `<script src="${website}/booking-likemagic.min.js"><\/script>`;
 
         const css = document.querySelector('#css');
         css.textContent = `<link href="${website}/booking-likemagic.min.css" rel="stylesheet">`;
-
         const component = document.querySelector('#component');
-        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"></booking-likemagic>`;
+        
+        if (cssurl) {
+            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}" cssurl="${cssurl}"></booking-likemagic>`;
+        } else {
+            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"></booking-likemagic>`;
+        }
+
+
     }
 
 
@@ -119,13 +130,28 @@
     langInput.addEventListener('change', (event) => {
         const component = document.querySelector('#component');
         lang = event.target.value;
-        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"></booking-likemagic>`;
+        if (cssurl) {
+            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}" cssurl="${cssurl}"></booking-likemagic>`;
+        } else {
+            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"></booking-likemagic>`;
+        }
     });
 
     tenantInput.addEventListener('input', (event) => {
         const component = document.querySelector('#component');
         tenant = event.target.value;
-        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"></booking-likemagic>`;
+        if (cssurl) {
+            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}" cssurl="${cssurl}"></booking-likemagic>`;
+        } else {
+            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"></booking-likemagic>`;
+        }
+    });
+
+    cssUrlInput.addEventListener('input', (event) => {
+        const component = document.querySelector('#component');
+        cssurl = event.target.value;
+
+        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}" cssurl="${cssurl}"></booking-likemagic>`;
     });
 
 
