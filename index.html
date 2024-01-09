@@ -52,6 +52,12 @@
             <li><label for="cssurl"><strong>Optional </strong>Custom CSS File(relative path):</label>
                 <input type="input" name="cssurl" id="cssurl" placeholder="/custom-booking-widget.css">
             </li>
+            <li><label for="newtab"><strong>Optional </strong>Open in a new tab:</label>
+                <input type="input" name="newtab" id="newtab" placeholder="true">
+            </li>
+            <li><label for="propertyId"><strong>Optional </strong>Preselect a property:</label>
+                <input type="input" name="propertyId" id="propertyId" placeholder="MAGIC">
+            </li>
         </ul>
         <h2>Add the Javascript file in your &lt;head&gt; element</h2>
         <pre style="background-color: lightgrey;"><code id="js">
@@ -62,7 +68,7 @@
         <pre style="background-color: lightgrey;"><code id="css">
 &lt;link href="https://my.likemagic.tech/booking-likemagic.min.css" rel="stylesheet" /&gt;
         </code></pre>
-        <h2>Add the WebComponentin your &lt;body&gt; element</h2>
+        <h2>Add the WebComponent in your &lt;body&gt; element</h2>
         <pre style="background-color: lightgrey;"><code id="component">
 &lt;booking-likemagic tenant="likemagic" language="en"&gt;&lt;/booking-likemagic&gt;
     </code></pre>
@@ -85,6 +91,8 @@
     const langInput = document.querySelector('#lang');
     const tenantInput = document.querySelector('#tenant');
     const cssUrlInput = document.querySelector('#cssurl');
+    const newTabInput = document.querySelector('#newtab');
+    const propertyIdInput = document.querySelector('#propertyId');
 
     const params = new URLSearchParams(location.search);
 
@@ -92,6 +100,8 @@
     let lang = params.get('lang') || 'en';
     let tenant = params.get('tenant') || 'likemagic';
     let cssurl = params.get('cssurl');
+    let newTab = params.get('cssurl');
+    let propertyId = params.get('cssurl');
 
 
     if (website !== null) {
@@ -99,6 +109,8 @@
         langInput.value = lang;
         tenantInput.value = tenant;
         cssUrlInput.value = cssurl;
+        newTabInput.value = newTab;
+        propertyIdInput.value = propertyId;
 
 
         const js = document.querySelector('#js');
@@ -109,12 +121,20 @@
         const component = document.querySelector('#component');
         
         if (cssurl) {
-            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}" cssurl="${cssurl}"></booking-likemagic>`;
+            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}" cssurl="${cssurl}"`;
         } else {
-            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"></booking-likemagic>`;
+            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"`;
         }
 
+        if(newTabInput) {
+            component.textContent += ` is-new-tab="true"`;
+        }
 
+        if(propertyIdInput) {
+            component.textContent += ` default-property-id="${propertyId}"`;
+        }
+
+        component.textContent +="></booking-likemagic>";
     }
 
 
@@ -130,29 +150,56 @@
     langInput.addEventListener('change', (event) => {
         const component = document.querySelector('#component');
         lang = event.target.value;
-        if (cssurl) {
-            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}" cssurl="${cssurl}"></booking-likemagic>`;
-        } else {
-            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"></booking-likemagic>`;
-        }
+        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
     });
 
     tenantInput.addEventListener('input', (event) => {
         const component = document.querySelector('#component');
         tenant = event.target.value;
-        if (cssurl) {
-            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}" cssurl="${cssurl}"></booking-likemagic>`;
-        } else {
-            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"></booking-likemagic>`;
-        }
+        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
     });
 
     cssUrlInput.addEventListener('input', (event) => {
         const component = document.querySelector('#component');
         cssurl = event.target.value;
 
-        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}" cssurl="${cssurl}"></booking-likemagic>`;
+        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
     });
+
+    newTabInput.addEventListener('input', (event) => {
+        const component = document.querySelector('#component');
+        newTab = event.target.value;
+
+        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
+    });
+
+    propertyIdInput.addEventListener('input', (event) => {
+        const component = document.querySelector('#component');
+        propertyId = event.target.value;
+
+        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
+    });
+
+    function getCssUrl(cssurl) {
+        if(cssurl) {
+            return ` cssurl="${cssurl}"`;
+        }
+        return "";
+    }
+
+    function getNewTab(newTab) {
+        if(newTab) {
+            return ` is-new-tab="true"`;
+        }
+        return "";
+    }
+
+    function getPropertyId(propertyId) {
+        if(propertyId) {
+            return ` default-property-id="${propertyId}"`;
+        }
+        return "";
+    }
 
 
 </script>
