@@ -59,6 +59,12 @@
                 <input type="input" name="propertyId" id="propertyId" placeholder="MAGIC">
             </li>
         </ul>
+        <div style="background-color: #fff3cd; padding: 20px; border-radius: 4px; margin: 20px 0; border-left: 5px solid #ffeeba; display: flex; align-items: center; gap: 15px;">
+            <div style="font-size: 24px;">⚠️</div>
+            <p style="color: #856404; margin: 0;">
+            <strong>Warning:</strong> The script must be integrated within the same domain as the website. You can't use localhost or a different domain than the one connected to LIKE MAGIC!
+            </p>
+        </div>
         <h2>Add the Javascript file in your &lt;head&gt; element</h2>
         <pre style="background-color: lightgrey;"><code id="js">
 &lt;script src="https://my.likemagic.tech/booking-likemagic.min.js"&gt;&lt;/script&gt;
@@ -72,17 +78,11 @@
         <pre style="background-color: lightgrey;"><code id="component">
 &lt;booking-likemagic tenant="likemagic" language="en"&gt;&lt;/booking-likemagic&gt;
     </code></pre>
-        <div style="display: flex; justify-content: center; width: 100%;"></div>
-        <h1 style="margin-top: 60px;">Example of StayKooook</h1>
-        <div style="display: flex; justify-content: center; width: 100%; margin-bottom: 100px; margin-top: 50px;">
-            <div style="width: 1200px;">
-                <booking-likemagic tenant="staykooook-dev" language="en"></booking-likemagic>
-            </div>
-        </div>
+
     </div>
     <footer style="height:auto; background-color:#70a6fc;">
         <h1 style="color: #f0f5fe; padding:40px; margin:0; text-align:center;">Made
-            with 🤍 at likeMagic
+            with 🤍 at LIKE MAGIC
         </h1>
     </footer>
 </body>
@@ -119,22 +119,22 @@
         const css = document.querySelector('#css');
         css.textContent = `<link href="${website}/booking-likemagic.min.css" rel="stylesheet">`;
         const component = document.querySelector('#component');
-        
+
         if (cssurl) {
             component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}" cssurl="${cssurl}"`;
         } else {
             component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"`;
         }
 
-        if(newTabInput) {
+        if (newTabInput) {
             component.textContent += ` is-new-tab="true"`;
         }
 
-        if(propertyIdInput) {
+        if (propertyIdInput) {
             component.textContent += ` default-property-id="${propertyId}"`;
         }
 
-        component.textContent +="></booking-likemagic>";
+        component.textContent += "></booking-likemagic>";
     }
 
 
@@ -181,21 +181,21 @@
     });
 
     function getCssUrl(cssurl) {
-        if(cssurl) {
+        if (cssurl) {
             return ` cssurl="${cssurl}"`;
         }
         return "";
     }
 
     function getNewTab(newTab) {
-        if(newTab) {
+        if (newTab) {
             return ` is-new-tab="true"`;
         }
         return "";
     }
 
     function getPropertyId(propertyId) {
-        if(propertyId) {
+        if (propertyId) {
             return ` default-property-id="${propertyId}"`;
         }
         return "";
