@@ -37,6 +37,7 @@
         <ul>
             <li><label for="website">Your URL:</label>
                 <input type="input" name="website" id="website" placeholder="https://likemagic.tech">
+                <p id="websiteError" style="margin: 4px 0 0; font-size: 13px; color: #c52f2f; display: none;"></p>
             </li>
             <li><label for="lang">Language:</label>
                 <select id="lang">
@@ -96,7 +97,7 @@
 
     const params = new URLSearchParams(location.search);
 
-    const website = params.get('website');
+    let website = params.get('website');
     let lang = params.get('lang') || 'en';
     let tenant = params.get('tenant') || 'likemagic';
     let cssurl = params.get('cssurl');
@@ -113,17 +114,18 @@
         propertyIdInput.value = propertyId;
 
 
+        const host = deriveWidgetHost(website);
         const js = document.querySelector('#js');
-        js.textContent = `<script src="${website}/booking-likemagic.min.js"><\/script>`;
+        js.textContent = `<script src="${host}/booking-likemagic.min.js"><\/script>`;
 
         const css = document.querySelector('#css');
-        css.textContent = `<link href="${website}/booking-likemagic.min.css" rel="stylesheet">`;
+        css.textContent = `<link href="${host}/booking-likemagic.min.css" rel="stylesheet">`;
         const component = document.querySelector('#component');
 
         if (cssurl) {
-            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}" cssurl="${cssurl}"`;
+            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getApiBaseUrl(website)} cssurl="${cssurl}"`;
         } else {
-            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"`;
+            component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getApiBaseUrl(website)}`;
         }
 
         if (newTabInput) {
@@ -140,45 +142,88 @@
 
 
     websiteInput.addEventListener('input', (event) => {
+        website = event.target.value;
+
+        const { valid, error } = validateWebsite(website);
+        const errorEl = document.querySelector('#websiteError');
+        if (valid) {
+            errorEl.style.display = 'none';
+            errorEl.textContent = '';
+            websiteInput.style.borderColor = '';
+        } else {
+            errorEl.style.display = 'block';
+            errorEl.textContent = error;
+            websiteInput.style.borderColor = '#c52f2f';
+        }
+
+        const host = deriveWidgetHost(website);
         const js = document.querySelector('#js');
-        js.textContent = `<script src="${event.target.value}/booking-likemagic.min.js"><\/script>`;
+        js.textContent = `<script src="${host}/booking-likemagic.min.js"><\/script>`;
 
         const css = document.querySelector('#css');
-        css.textContent = `<link href="${event.target.value}/booking-likemagic.min.css" rel="stylesheet">`;
+        css.textContent = `<link href="${host}/booking-likemagic.min.css" rel="stylesheet">`;
+
+        const component = document.querySelector('#component');
+        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getApiBaseUrl(website)}${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
     });
 
     langInput.addEventListener('change', (event) => {
         const component = document.querySelector('#component');
         lang = event.target.value;
-        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
+        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getApiBaseUrl(website)}${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
     });
 
     tenantInput.addEventListener('input', (event) => {
         const component = document.querySelector('#component');
         tenant = event.target.value;
-        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
+        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getApiBaseUrl(website)}${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
     });
 
     cssUrlInput.addEventListener('input', (event) => {
         const component = document.querySelector('#component');
         cssurl = event.target.value;
 
-        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
+        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getApiBaseUrl(website)}${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
     });
 
     newTabInput.addEventListener('input', (event) => {
         const component = document.querySelector('#component');
         newTab = event.target.value;
 
-        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
+        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getApiBaseUrl(website)}${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
     });
 
     propertyIdInput.addEventListener('input', (event) => {
         const component = document.querySelector('#component');
         propertyId = event.target.value;
 
-        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
+        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getApiBaseUrl(website)}${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
     });
+
+    function validateWebsite(value) {
+        if (!value) return { valid: true, error: "" };
+        if (!value.startsWith("https://")) {
+            return { valid: false, error: "URL must start with https://" };
+        }
+        if (value.slice("https://".length).includes("my.")) {
+            return { valid: false, error: "Remove the my. subdomain — we add it automatically." };
+        }
+        return { valid: true, error: "" };
+    }
+
+    function deriveWidgetHost(value) {
+        const { valid } = validateWebsite(value);
+        if (!value || !valid) return "";
+        return value.replace(/^https:\/\//, "https://my.").replace(/\/+$/, "");
+    }
+
+    function getApiBaseUrl(website) {
+        const host = deriveWidgetHost(website);
+        if (host) {
+            return ` api-base-url="${host}"`;
+        }
+        return "";
+    }
 
     function getCssUrl(cssurl) {
         if (cssurl) {
