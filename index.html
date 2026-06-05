@@ -50,6 +50,12 @@
             <li><label for="tenant">Tenant Name given to you by LIKE MAGIC:</label>
                 <input type="input" name="tenant" id="tenant" placeholder="likemagic">
             </li>
+            <li><label for="primarycolor">Color:</label>
+                <input type="input" name="primarycolor" id="primarycolor" placeholder="#000000">
+            </li>
+            <li><label for="fontfamily">Font Family:</label>
+                <input type="input" name="fontfamily" id="fontfamily" placeholder="sans-serif">
+            </li>
             <li><label for="cssurl"><strong>Optional </strong>Custom CSS File(relative path):</label>
                 <input type="input" name="cssurl" id="cssurl" placeholder="/custom-booking-widget.css">
             </li>
@@ -94,6 +100,8 @@
     const cssUrlInput = document.querySelector('#cssurl');
     const newTabInput = document.querySelector('#newtab');
     const propertyIdInput = document.querySelector('#propertyId');
+    const primaryColorInput = document.querySelector('#primarycolor');
+    const fontFamilyInput = document.querySelector('#fontfamily');
 
     const params = new URLSearchParams(location.search);
 
@@ -103,7 +111,8 @@
     let cssurl = params.get('cssurl');
     let newTab = params.get('cssurl');
     let propertyId = params.get('cssurl');
-
+    let primaryColor = params.get('primarycolor');
+    let fontFamily = params.get('fontfamily');
 
     if (website !== null) {
         websiteInput.value = website;
@@ -136,6 +145,14 @@
             component.textContent += ` default-property-id="${propertyId}"`;
         }
 
+        if (primaryColor) {
+          component.textContent += ` primary-color="${primaryColor}"`;
+        }
+
+        if(fontFamily) {
+          component.textContent += ` font-family="${fontFamily}"`;
+        }
+
         component.textContent += "></booking-likemagic>";
     }
 
@@ -163,42 +180,48 @@
         const css = document.querySelector('#css');
         css.textContent = `<link href="${host}/booking-likemagic.min.css" rel="stylesheet">`;
 
-        const component = document.querySelector('#component');
-        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getApiBaseUrl(website)}${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
+        rerenderComponent();
     });
 
     langInput.addEventListener('change', (event) => {
-        const component = document.querySelector('#component');
         lang = event.target.value;
-        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getApiBaseUrl(website)}${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
+        rerenderComponent();
     });
 
     tenantInput.addEventListener('input', (event) => {
-        const component = document.querySelector('#component');
         tenant = event.target.value;
-        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getApiBaseUrl(website)}${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
+        rerenderComponent();
     });
 
     cssUrlInput.addEventListener('input', (event) => {
-        const component = document.querySelector('#component');
         cssurl = event.target.value;
-
-        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getApiBaseUrl(website)}${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
+        rerenderComponent();
     });
 
     newTabInput.addEventListener('input', (event) => {
-        const component = document.querySelector('#component');
         newTab = event.target.value;
-
-        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getApiBaseUrl(website)}${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
+        rerenderComponent();
     });
 
     propertyIdInput.addEventListener('input', (event) => {
-        const component = document.querySelector('#component');
         propertyId = event.target.value;
-
-        component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getApiBaseUrl(website)}${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}></booking-likemagic>`;
+        rerenderComponent();
     });
+
+    primaryColorInput.addEventListener('input', (event) => {
+      primaryColor = event.target.value;
+      rerenderComponent();
+    });
+
+    fontFamilyInput.addEventListener('input', (event) => {
+      fontFamily = event.target.value;
+      rerenderComponent();
+    })
+
+    function rerenderComponent() {
+      const component = document.querySelector('#component');
+      component.textContent = `<booking-likemagic tenant="${tenant}" language="${lang}"${getApiBaseUrl(website)}${getCssUrl(cssurl)}${getNewTab(newTab)}${getPropertyId(propertyId)}${getPrimaryColor(primaryColor)}${getFontFamily(fontFamily)}></booking-likemagic>`;
+    }
 
     function validateWebsite(value) {
         if (!value) return { valid: true, error: "" };
@@ -244,6 +267,20 @@
             return ` default-property-id="${propertyId}"`;
         }
         return "";
+    }
+
+    function getPrimaryColor(primaryColor) {
+      if (primaryColor) {
+        return ` primary-color="${primaryColor}"`;
+      }
+      return "";
+    }
+
+    function getFontFamily(fontFamily) {
+      if (fontFamily) {
+        return ` font-family="${fontFamily}"`;
+      }
+      return "";
     }
 
 
